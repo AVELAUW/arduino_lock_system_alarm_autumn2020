@@ -1,15 +1,17 @@
 #include <Keypad.h>
 
-const emergencyKey = "***";
-const CODE = "1234";
+String emergencyKey = "***";
+String CODE = "1234";
 unsigned long startTime;  
-unsigned long currentTime;
-String inputPin;
+unsigned long currTime;
+String inputPin = "";
+
+boolean entered = false;
 
 int buzzerPin = 5;  // the number of the buzzer pin
 int echoPin = 6;    // Echo Pin of Ultrasonic Sensor
 int pingPin = 7;    // Trigger Pin of Ultrasonic Sensor
-//int buttonPin = 12; // Initialize buttonPin to D12
+int buttonPin = 12; // Initialize buttonPin to D12
 
 float sinVal;       // Define a variable to save sine value
 int toneVal;        // Define a variable to save sound frequency
@@ -63,10 +65,15 @@ void loop() {
   Serial.print("cm");
   Serial.println();
 
-  if (fabs(cmDist - 15) > 5 ) {
-    ringAlarm();
-    startTime = millis();
-    authorize();
+  if (fabs(cmDist - 15) > 5) {
+    
+    //if (!entered) {
+      startTime = millis();
+      authorize();
+   // } else {
+    //  entered = true;
+    //}
+    
   } else {
     noTone(buzzerPin);
   }
@@ -88,17 +95,14 @@ void ringAlarm() {
 
 //sketch timer execution
 void authorize() {
-  int currTime = millis();
-  while (currTime - startTime < 60000) {
-    boolean check = checkPin(inputPin);
-    if (check) {
-      chill();
-    } else {
-      piezo();
-    }
-    currTime = millis();
+  currTime = millis();
+  boolean check = checkPin(inputPin);
+  if (check) {
+    chill();
+    entered = true;
+  } else {
+    piezo();
   }
-  piezo();
 }
 
 
@@ -109,13 +113,16 @@ boolean checkPin(String input) {
   while (input.length() <= 4) {
     if (input.equals(emergencyKey)) {
       return true;
-      //or input = CODE;
     }
     char digit = customKeypad.getKey();
     if (digit = '#') {
       input = "";
-    } else {
+    } else if (digit != '0') {
       input += digit;
+    }
+    currTime = millis();
+    if (currTime - startTime < 60000) {
+      piezo();
     }
   }
   return input.equals(CODE);
@@ -123,8 +130,12 @@ boolean checkPin(String input) {
 
 void piezo() {
   ringAlarm();
+  // RED led on
 }
 
 void chill() {
   noTone(buzzerPin);
+  entered = true;
+  // GREEN led on
+  //global check if entered
 }
