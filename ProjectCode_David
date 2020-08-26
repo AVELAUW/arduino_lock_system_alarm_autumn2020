@@ -41,7 +41,7 @@ char hexaKeys[ROWS][COLS] = {
 byte rowPins[ROWS] = {R1, R2, R3, R4};
 byte colPins[COLS] = {C1, C2, C3};
 
-Keypad keypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
+Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
 
 void setup() {
   // put your setup code here, to run once:
@@ -81,7 +81,7 @@ void loop() {
 
 //sketch timer execution
 void authorize() {
-  currTime = millis();
+//  currTime = millis();
   boolean check = checkPin();
   if (check) {
     correct();
@@ -109,38 +109,46 @@ void incorrect() {
 //
 boolean checkPin() {
   String input = "";
-  while (input.length() <= 4) {
+  currTime = millis();
+  while (input.length() < 4 && (currTime - startTime) < 30000) {
     if (input.equals(emergencyKey)) {
       return true;
     }
 
-    char digit = keypad.getKey();
-    Serial.println(digit);
-
-    if (digit = '#') {
+    char digit = customKeypad.getKey();
+    
+    if (digit == '#') {
       input = "";
-    } else {
-      input += digit;
+      Serial.println("Cleared input");
+    } else if(digit != NO_KEY){
+      Serial.println(digit);
+      input = input + digit;
     }
     currTime = millis();
-    if (currTime - startTime > 60000) {
+    if (currTime - startTime > 30000) {
+      Serial.println("Time out");
       ringAlarm();
     }
   }
+  Serial.println("You've fully entered a code or time is up");
   return input.equals(CODE);
 }
 
 void ringAlarm() {
   int x = 0;
-  while (x < 360) {
+  char key;
+  while (x < 360 || key == NO_KEY) {
     sinVal = sin(x * (PI / 180));   // Calculate the sine of x
     toneVal = 2000 + sinVal * 500;  // Calculate sound frequency according to the sine of x
     tone(buzzerPin, toneVal);       // Output sound frequency to buzzerPin
     delay(1);
     x++;
-    char key = keypad.getKey();
+    key = customKeypad.getKey();
     if (key == '*') {
+      noTone(buzzerPin);
+      startTime = millis();
       checkPin();
+      break;
     }
   }
 }
