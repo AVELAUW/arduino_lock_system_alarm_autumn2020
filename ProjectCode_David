@@ -1,10 +1,12 @@
 #include <Keypad.h>
 
 String emergencyKey = "***";
+
+//change code here
 String CODE = "1234";
-unsigned long startTime;  
+
+unsigned long startTime;
 unsigned long currTime;
-String inputPin = "";
 
 boolean entered = false;
 
@@ -16,16 +18,16 @@ int buttonPin = 12; // Initialize buttonPin to D12
 float sinVal;       // Define a variable to save sine value
 int toneVal;        // Define a variable to save sound frequency
 
-int stopper = 1;    // Used to swireOne/play sound
+//int stopper = 1;    // Used to swireOne/play sound
 
 // Keypad setup
-byte wireOne = A0;      // top most row on numbpad
-byte wireTwo = A1;      // top mid row on numbpad
-byte wireThree = A2;    // bottom middle row
-byte wireFour = A3;     //bottom most row ""
-byte wireFive = 8;      // left most column on numpad
-byte wireSix = 9;       //center left column on numpad
-byte wireSeven = 10;    //center right column on numbpad
+byte R1 = A0;      // top most row on numbpad
+byte R2 = A1;      // top mid row on numbpad
+byte R3 = A2;    // bottom middle row
+byte R4 = A3;     //bottom most row
+byte C1 = 8;      // left most column on numpad
+byte C2 = 9;       //center left column on numpad
+byte C3 = 10;    // right column on numbpad
 
 const byte ROWS = 4;
 const byte COLS = 3;
@@ -36,10 +38,10 @@ char hexaKeys[ROWS][COLS] = {
   {'*', '0', '#'}
 };
 
-byte rowPins[ROWS] = {wireOne, wireTwo, wireThree, wireFour};
-byte colPins[COLS] = {wireFive, wireSix, wireSeven};
+byte rowPins[ROWS] = {R1, R2, R3, R4};
+byte colPins[COLS] = {C1, C2, C3};
 
-Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
+Keypad keypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
 
 void setup() {
   // put your setup code here, to run once:
@@ -48,7 +50,6 @@ void setup() {
   pinMode(echoPin, INPUT);    // To receive the wave
   pinMode(pingPin, OUTPUT);   // To send the wave
   pinMode(buzzerPin, OUTPUT); // Set Buzzer pin to output mode
-
 }
 
 void loop() {
@@ -66,76 +67,83 @@ void loop() {
   Serial.println();
 
   if (fabs(cmDist - 15) > 5) {
-    
-    //if (!entered) {
+    if (!entered) {
       startTime = millis();
       authorize();
-   // } else {
-    //  entered = true;
-    //}
-    
+    } else {
+      entered = false;
+      delay(5000);
+    }
   } else {
     noTone(buzzerPin);
-  }
-}
-
-
-float microsecondsToCentimeters(long microseconds) {
-  return microseconds / 29.0 / 2.0;
-}
-
-void ringAlarm() {
-  for (int x = 0; x < 60000; x++) {   // X from 0 degree->60000 degree --- I'm assuming this makes it go longer
-    sinVal = sin(x * (PI / 180));   // Calculate the sine of x
-    toneVal = 2000 + sinVal * 500;  // Calculate sound frequency according to the sine of x
-    tone(buzzerPin, toneVal);       // Output sound frequency to buzzerPin
-    delay(1);
   }
 }
 
 //sketch timer execution
 void authorize() {
   currTime = millis();
-  boolean check = checkPin(inputPin);
+  boolean check = checkPin();
   if (check) {
-    chill();
-    entered = true;
+    correct();
   } else {
-    piezo();
+    incorrect();
   }
 }
 
+void correct() {
+  Serial.println("Welcome");
+  noTone(buzzerPin);
+  entered = true;
+  // turn on green LED
+}
+
+void incorrect() {
+  Serial.println("Try again");
+  ringAlarm();
+  // turn on red LED
+}
 
 // checks the 4 digit pin, returns true if code is correct or the emergecy key
 // # is reset button
-// 
-boolean checkPin(String input) {
+//
+boolean checkPin() {
+  String input = "";
   while (input.length() <= 4) {
     if (input.equals(emergencyKey)) {
       return true;
     }
-    char digit = customKeypad.getKey();
+
+    char digit = keypad.getKey();
+    Serial.println(digit);
+
     if (digit = '#') {
       input = "";
-    } else if (digit != '0') {
+    } else {
       input += digit;
     }
     currTime = millis();
-    if (currTime - startTime < 60000) {
-      piezo();
+    if (currTime - startTime > 60000) {
+      ringAlarm();
     }
   }
   return input.equals(CODE);
 }
 
-void piezo() {
-  ringAlarm();
-  // RED led on
+void ringAlarm() {
+  int x = 0;
+  while (x < 360) {
+    sinVal = sin(x * (PI / 180));   // Calculate the sine of x
+    toneVal = 2000 + sinVal * 500;  // Calculate sound frequency according to the sine of x
+    tone(buzzerPin, toneVal);       // Output sound frequency to buzzerPin
+    delay(1);
+    x++;
+    char key = keypad.getKey();
+    if (key == '*') {
+      checkPin();
+    }
+  }
 }
 
-void chill() {
-  noTone(buzzerPin);
-  entered = true;
-  // GREEN led on
-  //global check if entered
+float microsecondsToCentimeters(long microseconds) {
+  return microseconds / 29.0 / 2.0;
 }
