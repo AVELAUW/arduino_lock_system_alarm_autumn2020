@@ -95,6 +95,7 @@ void correct() {
   noTone(buzzerPin);
   entered = true;
   // turn on green LED
+  delay(3000);
 }
 
 void incorrect() {
