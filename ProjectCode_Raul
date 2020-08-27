@@ -1,48 +1,57 @@
-//Alarm goes on if outside dist range until the pin is pressed!
-
 #include <Keypad.h>
 
-const emergencyKey = "***";
+String emergencyKey = "***";
+
+//change code here
+String CODE = "1234";
+
+unsigned long startTime;
+unsigned long currTime;
+
+boolean entered = false;
 
 int buzzerPin = 5;  // the number of the buzzer pin
 int echoPin = 6;    // Echo Pin of Ultrasonic Sensor
 int pingPin = 7;    // Trigger Pin of Ultrasonic Sensor
-//int buttonPin = 12; // Initialize buttonPin to D12
+int greenLed = 11;
+int redLed = 12; // 
 
 float sinVal;       // Define a variable to save sine value
 int toneVal;        // Define a variable to save sound frequency
 
-int stopper = 1;    // Used to swireOne/play sound
+//int stopper = 1;    // Used to swireOne/play sound
 
 // Keypad setup
-byte wireOne = A0;      // top most row on numbpad
-byte wireTwo = A1;      // top mid row on numbpad
-byte wireThree = A2;    // bottom middle row
-byte wireFour = A3;     //bottom most row ""
-byte wireFive = 8;      // left most column on numpad
-byte wireSix = 9;       //center left column on numpad
-byte wireSeven = 10;    //center right column on numbpad
+byte R1 = A0;      // top most row on numbpad
+byte R2 = A1;      // top mid row on numbpad
+byte R3 = A2;    // bottom middle row
+byte R4 = A3;     //bottom most row
+byte C1 = 8;      // left most column on numpad
+byte C2 = 9;       //center left column on numpad
+byte C3 = 10;    // right column on numbpad
 
-  const byte ROWS = 4;
-  const byte COLS = 3;
-  char hexaKeys[ROWS][COLS] = {
-    {'1','2','3'},
-    {'4','5','6'},
-    {'7','8','9'},
-    {'*','0','#'}};
+const byte ROWS = 4;
+const byte COLS = 3;
+char hexaKeys[ROWS][COLS] = {
+  {'1', '2', '3'},
+  {'4', '5', '6'},
+  {'7', '8', '9'},
+  {'*', '0', '#'}
+};
 
-  byte rowPins[ROWS] = {wireOne, wireTwo, wireThree, wireFour};
-  byte colPins[COLS] = {wireFive, wireSix, wireSeven};
-  
-  Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
+byte rowPins[ROWS] = {R1, R2, R3, R4};
+byte colPins[COLS] = {C1, C2, C3};
+
+Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);         // Starting Serial Terminal
-  pinMode(buttonPin, INPUT);  // To turn off the alarm
   pinMode(echoPin, INPUT);    // To receive the wave
   pinMode(pingPin, OUTPUT);   // To send the wave
   pinMode(buzzerPin, OUTPUT); // Set Buzzer pin to output mode
+  pinMode(greenLed, OUTPUT);
+  pinMode(redLed, OUTPUT);
 }
 
 void loop() {
@@ -58,30 +67,104 @@ void loop() {
   Serial.print(cmDist);
   Serial.print("cm");
   Serial.println();
-  
-  if (fabs(cmDist - 15) > 5 ) {
-    ringAlarm();
+
+  if (fabs(cmDist - 15) > 5) {
+    if (!entered) {
+      Serial.println("You're trying to get in");
+      startTime = millis();
+      authorize();
+    } else {
+      Serial.println("You're leaving the room");
+      entered = false;
+      delay(5000);
+    }
   } else {
     noTone(buzzerPin);
   }
 }
 
+//sketch timer execution
+void authorize() {
+//  currTime = millis();
+  boolean check = checkPin();
+  if (check) {
+    correct();
+  } else {
+    incorrect();
+  }
+}
 
-float microsecondsToCentimeters(long microseconds) {
-  return microseconds / 29.0 / 2.0;
+void correct() {
+  Serial.println("Welcome");
+  noTone(buzzerPin);
+  entered = true;
+  digitalWrite(greenLed, HIGH);
+  delay(3000);
+  digitalWrite(greenLed, LOW);
+}
+
+void incorrect() {
+  Serial.println("Try again");
+  ringAlarm();
+  // turn on red LED
+}
+
+// checks the 4 digit pin, returns true if code is correct or the emergecy key
+// # is reset button
+//
+boolean checkPin() {
+  String input = "";
+  currTime = millis();
+  while (input.length() < 4 && (currTime - startTime) < 30000) {
+    if (input.equals(emergencyKey)) {
+      return true;
+    }
+
+    char digit = customKeypad.getKey();
+    
+    if (digit == '#') {
+      input = "";
+      Serial.println("Cleared input");
+    } else if(digit != NO_KEY){
+      Serial.println(digit);
+      input = input + digit;
+    }
+    currTime = millis();
+    if (currTime - startTime > 30000) {
+      Serial.println("Time out");
+      ringAlarm();
+    }
+  }
+  Serial.println("You've fully entered a code or time is up");
+  return input.equals(CODE);
 }
 
 void ringAlarm() {
-  for (int x = 0; x < 360; x++) {   // X from 0 degree->360 degree
+  int x = 0;
+  char key = customKeypad.getKey();
+  while (key == NO_KEY || key != '*') {
     sinVal = sin(x * (PI / 180));   // Calculate the sine of x
     toneVal = 2000 + sinVal * 500;  // Calculate sound frequency according to the sine of x
     tone(buzzerPin, toneVal);       // Output sound frequency to buzzerPin
     delay(1);
-    /*
-    if(digitalRead(buttonPin) == LOW) {
-      return 2;
+    if(x % 360 == 0) {
+      digitalWrite(redLed, HIGH);
+    } else if (x % 360 == 180) {
+      digitalWrite(redLed, LOW);
     }
-    */
+    x++;
+    key = customKeypad.getKey();
+    if (key == '*') {
+      noTone(buzzerPin);
+      digitalWrite(redLed, LOW);
+      startTime = millis();
+      authorize();               // Authorize instead because that is what checks FURTHER TESTING NEEDED along with TEST SCENARIOS
+      key = NO_KEY;
+      break;
+    }
   }
 }
 
+float microsecondsToCentimeters(long microseconds) {
+  return microseconds / 29.0 / 2.0;
+}
