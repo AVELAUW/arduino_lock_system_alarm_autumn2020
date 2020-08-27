@@ -13,7 +13,8 @@ boolean entered = false;
 int buzzerPin = 5;  // the number of the buzzer pin
 int echoPin = 6;    // Echo Pin of Ultrasonic Sensor
 int pingPin = 7;    // Trigger Pin of Ultrasonic Sensor
-int buttonPin = 12; // Initialize buttonPin to D12
+int greenLed = 11;
+int redLed = 12; // 
 
 float sinVal;       // Define a variable to save sine value
 int toneVal;        // Define a variable to save sound frequency
@@ -46,10 +47,11 @@ Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS)
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);         // Starting Serial Terminal
-  pinMode(buttonPin, INPUT);  // To turn off the alarm
   pinMode(echoPin, INPUT);    // To receive the wave
   pinMode(pingPin, OUTPUT);   // To send the wave
   pinMode(buzzerPin, OUTPUT); // Set Buzzer pin to output mode
+  pinMode(greenLed, OUTPUT);
+  pinMode(redLed, OUTPUT);
 }
 
 void loop() {
@@ -68,9 +70,11 @@ void loop() {
 
   if (fabs(cmDist - 15) > 5) {
     if (!entered) {
+      Serial.println("You're trying to get in");
       startTime = millis();
       authorize();
     } else {
+      Serial.println("You're leaving the room");
       entered = false;
       delay(5000);
     }
@@ -136,18 +140,25 @@ boolean checkPin() {
 
 void ringAlarm() {
   int x = 0;
-  char key;
-  while (x < 360 || key == NO_KEY) {
+  char key = customKeypad.getKey();
+  while (key == NO_KEY || key != '*') {
     sinVal = sin(x * (PI / 180));   // Calculate the sine of x
     toneVal = 2000 + sinVal * 500;  // Calculate sound frequency according to the sine of x
     tone(buzzerPin, toneVal);       // Output sound frequency to buzzerPin
     delay(1);
+    if(x % 360 == 0) {
+      digitalWrite(redLed, HIGH);
+    } else if (x % 360 == 180) {
+      digitalWrite(redLed, LOW);
+    }
     x++;
     key = customKeypad.getKey();
     if (key == '*') {
       noTone(buzzerPin);
+      digitalWrite(redLed, LOW);
       startTime = millis();
       checkPin();
+      key = NO_KEY;
       break;
     }
   }
