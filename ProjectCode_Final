@@ -113,9 +113,7 @@ void incorrect() {
 // or if the EMERGENCYKEY is entered. # key resets the input values.
 boolean checkPin() {
   String input = ""; 
-  currTime = millis();
-  println(currTime);
-  println(startTime);
+  currTime = millis(); // Updates current timer value
   while (input.length() < 4 && (currTime - startTime) < 30000) {
     char digit = customKeypad.getKey();
     
