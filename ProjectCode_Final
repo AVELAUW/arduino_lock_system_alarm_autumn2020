@@ -19,13 +19,13 @@ int greenLed = 11;
 int redLed = 12; // 
 
 // Keypad setup
-byte R1 = A0;   // Top most row on numbpad
-byte R2 = A1;   // Top mid row on numbpad
-byte R3 = A2;   // Bottom middle row
-byte R4 = A3;   // Tottom most row
-byte C1 = 8;    // Left most column on numpad
-byte C2 = 9;    // Center left column on numpad
-byte C3 = 10;   // Right column on numbpad
+byte R1 = A0;   // Row one (Top most row containing: 1 2 3)
+byte R2 = A1;   // Row two 
+byte R3 = A2;   // Row three
+byte R4 = A3;   // Row four (Bottom most row containing: * 0 #)
+byte C1 = 8;    // Column one (Left most column: 1 4 7 *)
+byte C2 = 9;    // Column two
+byte C3 = 10;   // Column three (Right most column: 3 6 9 #)
 const byte ROWS = 4;
 const byte COLS = 3;
 char hexaKeys[ROWS][COLS] = {
