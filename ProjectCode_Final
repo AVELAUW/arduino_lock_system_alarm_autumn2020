@@ -87,7 +87,7 @@ void authorize() {
   //Starts timer to go in the room
   startTime = millis();
   boolean check = checkPin();
-  if (check) {
+  if (check == true) {
     correct();
   } else {
     incorrect();
