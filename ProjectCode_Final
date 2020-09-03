@@ -12,11 +12,11 @@ unsigned long currTime;
 boolean entered = false;
 
 //Initialize pin global variables
-int buzzerPin = 5;  // The number of the buzzer pin
-int echoPin = 6;    // Echo Pin of Ultrasonic Sensor
-int pingPin = 7;    // Trigger Pin of Ultrasonic Sensor
-int greenLed = 11;
-int redLed = 12; // 
+int buzzerPin = 5;  // Buzzer pin number
+int echoPin   = 6;  // Ultrasonic Sensor echo pin number
+int pingPin   = 7;  // Ultrasonic Sensor trigger pin number
+int greenLed  = 11; // Green LED pin number
+int redLed    = 12; // Red LED pin number
 
 // Keypad setup
 byte R1 = A0;   // Row one (Top most row containing: 1 2 3)
