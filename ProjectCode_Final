@@ -142,7 +142,7 @@ void ringAlarm() {
   char key = customKeypad.getKey();
   
   //Ring alarm repeatedly
-  while (key != '*' ||) {// key == NO_KEY) {
+  while (key != '*' || key == NO_KEY) {
     angle++; // Increment the angle variable by 1 ('++' means '+= 1')
     sinVal = sin(angle * (PI / 180)); // Calculate the sine of the angle
     toneVal = 2000 + sinVal * 500;    // Calculate sound frequency according to the sine of the angle
