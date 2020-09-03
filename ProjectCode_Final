@@ -98,6 +98,7 @@ void correct() {
   Serial.println("Welcome");
   noTone(buzzerPin);
   insideRoom = true;
+  // Keeps green LED on for 3 seconds
   digitalWrite(greenLed, HIGH);
   delay(3000);
   digitalWrite(greenLed, LOW);
@@ -106,7 +107,6 @@ void correct() {
 void incorrect() {
   Serial.println("Try again");
   ringAlarm();
-  // turn on red LED
 }
 
 // checks the 4 digit pin, returns true if code is correct or the emergecy key
