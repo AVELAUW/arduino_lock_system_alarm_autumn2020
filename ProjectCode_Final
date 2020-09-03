@@ -165,6 +165,7 @@ void ringAlarm() {
     
     //Increment the angle variable by 1 ('++' means '+= 1')
     angle++;
+    Serial.println(angle);
   }
 }
 
