@@ -18,9 +18,6 @@ int pingPin = 7;    // Trigger Pin of Ultrasonic Sensor
 int greenLed = 11;
 int redLed = 12; // 
 
-float sinVal;       // Define a variable to save sine value
-int toneVal;        // Define a variable to save sound frequency
-
 // Keypad setup
 byte R1 = A0;      // top most row on numbpad
 byte R2 = A1;      // top mid row on numbpad
@@ -138,6 +135,8 @@ boolean checkPin() {
 }
 
 void ringAlarm() {
+  float sinVal;       // Define a variable to save sine value
+  int toneVal;        // Define a variable to save sound frequency
   int x = 0;
   char key = customKeypad.getKey();
   while (key == NO_KEY || key != '*') {
