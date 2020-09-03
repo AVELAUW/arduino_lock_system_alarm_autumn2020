@@ -15,7 +15,7 @@ const int EXIT_TIME = 10;
 unsigned long startTime;
 unsigned long currTime;
 //Initialize room-state global variable as if you're outside the room
-boolean entered = false;
+boolean insideRoom = false;
 
 //Initialize pin global variables
 int buzzerPin = 5;  // Buzzer pin number
@@ -71,12 +71,12 @@ void loop() {
   Serial.println("cm");
 
   if (fabs(cmDist - NORM_DIST) > ERROR) { // fabs() = float absolute value
-    if (!entered) {
+    if (insideRoom == false) {
       Serial.println("You're trying to get in");
       authorize();
     } else {
       Serial.println("You're leaving the room");
-      entered = false;
+      insideRoom = false;
       delay(EXIT_TIME * 1000);
     }
   }
@@ -96,7 +96,7 @@ void authorize() {
 void correct() {
   Serial.println("Welcome");
   noTone(buzzerPin);
-  entered = true;
+  insideRoom = true;
   digitalWrite(greenLed, HIGH);
   delay(3000);
   digitalWrite(greenLed, LOW);
