@@ -37,8 +37,7 @@ byte rowPins[ROWS] = {R1, R2, R3, R4};
 byte colPins[COLS] = {C1, C2, C3};
 Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
 
-void setup() {
-  // put your setup code here, to run once:
+void setup() { // Setup code runs only once
   Serial.begin(9600);         // Starting Serial Terminal
   pinMode(echoPin, INPUT);    // To receive the wave
   pinMode(pingPin, OUTPUT);   // To send the wave
