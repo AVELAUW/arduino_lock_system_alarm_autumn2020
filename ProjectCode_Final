@@ -1,11 +1,9 @@
-// Working but not clean
-
 #include <Keypad.h>
 
-String emergencyKey = "***";
-
-//change access code here
-String CODE = "1234";
+//Access code
+const String CODE = "1234";
+//Emergency key
+const String EMERGENCYKEY = "***";
 
 unsigned long startTime;
 unsigned long currTime;
@@ -117,7 +115,7 @@ boolean checkPin() {
   while (input.length() < 4 && (currTime - startTime) < 30000) {
     char digit = customKeypad.getKey();
     
-    if (input.equals(emergencyKey)) {
+    if (input.equals(EMERGENCYKEY)) {
       return true;
     } else if (digit == '#') {
       input = "";
