@@ -154,10 +154,10 @@ void ringAlarm() {
     } else if (angle % 360 == 180) {
       digitalWrite(redLed, LOW);
     }
-
+    
+    // Check for the escape key, '*', to try inputting the code again
     key = customKeypad.getKey();
     if(key == '*') {
-      Serial.println("you pressed *");
       noTone(buzzerPin);         // Turn off buzzer
       digitalWrite(redLed, LOW); // Turn off red LED
       authorize();
@@ -165,7 +165,6 @@ void ringAlarm() {
     
     //Increment the angle variable by 1 ('++' means '+= 1')
     angle++;
-    Serial.println(angle);
   }
 }
 
