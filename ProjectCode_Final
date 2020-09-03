@@ -10,6 +10,8 @@ const int NORM_DIST = 15;
 const int ERROR = 5;
 //Time to leave the room in seconds
 const int EXIT_TIME = 10;
+//Time to input code into keypad
+const int INPUT_CODE_TIME = 30;
 
 //Initialize timer global variables
 unsigned long startTime;
@@ -112,35 +114,30 @@ void incorrect() {
 // Checks the four digit pin, returns true if the input matches the CODE
 // or if the EMERGENCYKEY is entered. # key resets the input values.
 boolean checkPin() {
-  String input = ""; 
+  String input = "";   // Clear input values
   currTime = millis(); // Updates current timer value
-  while (input.length() < 4 && (currTime - startTime) < 30000) {
+  
+  // Check keypad inputs
+  while (input.length() < 4 && (currTime - startTime) < (INPUT_CODE_TIME * 1000)) {
     char digit = customKeypad.getKey();
-    
     if (input.equals(EMERGENCYKEY)) {
       return true;
     } else if (digit == '#') {
-      input = "";
-      Serial.println("Cleared input");
-    } else if (digit != NO_KEY) {
-      Serial.println(digit);
+      input = ""; // Clear input
+    } else if (digit != NO_KEY) { // '!=' means 'does not equal'
       input = input + digit;
+      Serial.println(digit);
     }
-    
-    currTime = millis();
-    if (currTime - startTime > 30000) {
-      Serial.println("Time out");
-      ringAlarm();
-    }
-    
+    currTime = millis(); // Update the current time
   }
-  Serial.println("You've fully entered a code or time is up");
-  return input.equals(CODE);
+  
+  // You've fully entered a code or the input code time expired
+  return input.equals(CODE); 
 }
 
 void ringAlarm() {
-  float sinVal;       // Define a variable to save sine value
-  int toneVal;        // Define a variable to save sound frequency
+  float sinVal; // Define a variable to save sine value
+  int toneVal;  // Define a variable to save sound frequency
   int x = 0;
   char key = customKeypad.getKey();
   while (key == NO_KEY || key != '*') {
@@ -149,6 +146,7 @@ void ringAlarm() {
     tone(buzzerPin, toneVal);       // Output sound frequency to buzzerPin
     delay(1);
     
+    // Blink red LED
     if(x % 360 == 0) {
       digitalWrite(redLed, HIGH);
     } else if (x % 360 == 180) {
