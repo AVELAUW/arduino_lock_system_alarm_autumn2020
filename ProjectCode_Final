@@ -5,12 +5,13 @@ const String CODE = "1234";
 //Emergency key
 const String EMERGENCYKEY = "***";
 
+//Initialize timer global variables
 unsigned long startTime;
 unsigned long currTime;
-
-//Starts as if you are outside the room
+//Initialize room-state global variable as if you're outside the room
 boolean entered = false;
 
+//Initialize pin global variables
 int buzzerPin = 5;  // the number of the buzzer pin
 int echoPin = 6;    // Echo Pin of Ultrasonic Sensor
 int pingPin = 7;    // Trigger Pin of Ultrasonic Sensor
