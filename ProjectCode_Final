@@ -48,7 +48,7 @@ void setup() {
 }
 
 void loop() {
-  float duration, cmDist; // Find measurement in cm
+  float duration, cmDist; // Finds measurement in cm
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
   digitalWrite(trigPin, HIGH);
