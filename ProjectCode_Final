@@ -112,8 +112,10 @@ void incorrect() {
 // Checks the four digit pin, returns true if the input matches the CODE
 // or if the EMERGENCYKEY is entered. # key resets the input values.
 boolean checkPin() {
-  String input = "";
+  String input = ""; 
   currTime = millis();
+  println(currTime);
+  println(startTime);
   while (input.length() < 4 && (currTime - startTime) < 30000) {
     char digit = customKeypad.getKey();
     
