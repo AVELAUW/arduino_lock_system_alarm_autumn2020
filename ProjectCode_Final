@@ -14,7 +14,7 @@ boolean entered = false;
 //Initialize pin global variables
 int buzzerPin = 5;  // Buzzer pin number
 int echoPin   = 6;  // Ultrasonic Sensor echo pin number
-int pingPin   = 7;  // Ultrasonic Sensor trigger pin number
+int trigPin   = 7;  // Ultrasonic Sensor trigger pin number
 int greenLed  = 11; // Green LED pin number
 int redLed    = 12; // Red LED pin number
 
@@ -37,23 +37,24 @@ byte rowPins[ROWS] = {R1, R2, R3, R4};
 byte colPins[COLS] = {C1, C2, C3};
 Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
 
-void setup() { // Setup code runs only once
+// Setup code runs only once
+void setup() { 
   Serial.begin(9600);         // Starting Serial Terminal
-  pinMode(echoPin, INPUT);    // To receive the wave
-  pinMode(pingPin, OUTPUT);   // To send the wave
-  pinMode(buzzerPin, OUTPUT); // Set Buzzer pin to output mode
-  pinMode(greenLed, OUTPUT);
-  pinMode(redLed, OUTPUT);
+  pinMode(echoPin, INPUT);    // Setting the Echo pin as an input to receive the wave
+  pinMode(trigPin, OUTPUT);   // Setting the Trigger Pin as an output to send the wave
+  pinMode(buzzerPin, OUTPUT); // Setting the buzzer pin as an output to play sound
+  pinMode(greenLed, OUTPUT);  // Setting the green LED as an output to display light
+  pinMode(redLed, OUTPUT);    // Setting the red LED as an output to display light
 }
 
 void loop() {
   // This all checks the distance in cm:
   float duration, cmDist;
-  digitalWrite(pingPin, LOW);
+  digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
-  digitalWrite(pingPin, HIGH);
+  digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
-  digitalWrite(pingPin, LOW);
+  digitalWrite(trigPin, LOW);
   duration = pulseIn(echoPin, HIGH);
   cmDist = microsecondsToCentimeters(duration);
   Serial.print(cmDist);
