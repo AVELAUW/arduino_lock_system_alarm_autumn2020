@@ -6,7 +6,7 @@ const String CODE = "1234";
 const String EMERGENCYKEY = "***";
 //Normal distance to closed room door in cm
 const int NORM_DIST = 15;
-//Error bound for the distance sensor in cm
+//Error bound for a closed door in cm
 const int ERROR = 5;
 //Time to leave the room in seconds
 const int EXIT_TIME = 10;
