@@ -4,6 +4,12 @@
 const String CODE = "1234";
 //Emergency key
 const String EMERGENCYKEY = "***";
+//Normal distance to closed room door in cm
+const int NORM_DIST = 15;
+//Error bound for the distance sensor in cm
+const int ERROR = 5;
+//Time to leave the room in seconds
+const int EXIT_TIME = 10;
 
 //Initialize timer global variables
 unsigned long startTime;
@@ -48,32 +54,35 @@ void setup() {
 }
 
 void loop() {
-  float duration, cmDist; // Calculate distance in cm
-  digitalWrite(trigPin, LOW);
+  float duration, cmDist;      // Distance variables
+  
+  digitalWrite(trigPin, LOW);  // Turn wave off
   delayMicroseconds(2);
-  digitalWrite(trigPin, HIGH);
+  digitalWrite(trigPin, HIGH); // Turn wave on
   delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
+  digitalWrite(trigPin, LOW);  // Turn wave off
+  
+  //Use the following functions to calculate the distance in cm
   duration = pulseIn(echoPin, HIGH);
   cmDist = microsecondsToCentimeters(duration);
+  
+  //Prints results to the serial monitor
   Serial.print(cmDist);
   Serial.println("cm");
 
-  if (fabs(cmDist - 15) > 5) {
+  if (fabs(cmDist - NORM_DIST) > ERROR) { // fabs() = float absolute value
     if (!entered) {
       Serial.println("You're trying to get in");
       authorize();
     } else {
       Serial.println("You're leaving the room");
       entered = false;
-      delay(5000);
+      delay(EXIT_TIME * 1000);
     }
-  } else {
-    noTone(buzzerPin);
   }
 }
 
-//sketch timer execution
+//Sketch timer execution
 void authorize() {
   startTime = millis();
   boolean check = checkPin();
