@@ -98,9 +98,10 @@ void correct() {
   Serial.println("Welcome");
   noTone(buzzerPin);
   insideRoom = true;
-  // Keeps green LED on for 3 seconds
-  digitalWrite(greenLed, HIGH);
-  delay(3000);
+  
+  //Turn green LED on for three seconds
+  digitalWrite(greenLed, HIGH); 
+  delay(3000); 
   digitalWrite(greenLed, LOW);
 }
 
@@ -109,9 +110,8 @@ void incorrect() {
   ringAlarm();
 }
 
-// checks the 4 digit pin, returns true if code is correct or the emergecy key
-// # is reset button
-//
+// Checks the four digit pin, returns true if the input matches the CODE
+// or if the EMERGENCYKEY is entered. # key resets the input values.
 boolean checkPin() {
   String input = "";
   currTime = millis();
