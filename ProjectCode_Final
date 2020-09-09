@@ -1,4 +1,5 @@
 #include <Keypad.h>
+#include <Servo.h>
 
 //Access code
 const String CODE = "1234";
@@ -13,13 +14,23 @@ const int EXIT_TIME = 10;
 //Time to input code into keypad
 const int INPUT_CODE_TIME = 30;
 
+//Create servo object to control a servo
+Servo myServo;      
+
+//Time available for every degree in ms
+const int TIME_PER_DEG = (INPUT_CODE_TIME * 1000 / 180);
+//The position for the servo
+int servoPos = 0;
+
 //Initialize timer global variables
 unsigned long startTime;
 unsigned long currTime;
+unsigned long clockTimer;
 //Initialize room-state global variable as if you're outside the room
 boolean insideRoom = false;
 
 //Initialize pin global variables
+int servoPin  = 4;  // Servo signal line pin number
 int buzzerPin = 5;  // Buzzer pin number
 int echoPin   = 6;  // Ultrasonic Sensor echo pin number
 int trigPin   = 7;  // Ultrasonic Sensor trigger pin number
@@ -53,10 +64,13 @@ void setup() {
   pinMode(buzzerPin, OUTPUT); // Setting the buzzer pin as an output to play sound
   pinMode(greenLed, OUTPUT);  // Setting the green LED as an output to display light
   pinMode(redLed, OUTPUT);    // Setting the red LED as an output to display light
+  myServo.attach(servoPin);   // Setting the servo on servo pin to the servo object
 }
 
 void loop() {
   float duration, cmDist;      // Distance variables
+
+  myServo.write(0);
   
   digitalWrite(trigPin, LOW);  // Turn wave off
   delayMicroseconds(2);
@@ -86,7 +100,10 @@ void loop() {
 
 //Sketch timer execution
 void authorize() {
-  startTime = millis(); // Starts timer
+  startTime = millis();      // Starts timer
+  servoPos = 0;
+  noTone(buzzerPin);         // Turn off buzzer
+  digitalWrite(redLed, LOW); // Turn off red LED
   boolean check = checkPin();
   if (check == true) {
     correct();
@@ -107,7 +124,7 @@ void correct() {
 }
 
 void incorrect() {
-  Serial.println("Try again");
+  Serial.println("Alarm will start");
   ringAlarm();
 }
 
@@ -115,11 +132,16 @@ void incorrect() {
 // or if the EMERGENCYKEY is entered. # key resets the input values.
 boolean checkPin() {
   String input = "";   // Clear input values
-  currTime = millis(); // Updates current timer value
+  
+  currTime = millis(); // Updates current timer value  
+  clockTimer = millis();
+  int moveCounts = 1;
   
   // Check keypad inputs
   while (input.length() < 4 && (currTime - startTime) < (INPUT_CODE_TIME * 1000)) {
     char digit = customKeypad.getKey();
+    long timer = currTime - startTime;
+    
     if (input.equals(EMERGENCYKEY)) {
       return true;
     } else if (digit == '#') {
@@ -128,10 +150,20 @@ boolean checkPin() {
       input = input + digit;
       Serial.println(digit);
     }
+
+    if(timer > TIME_PER_DEG * moveCounts) {
+      servoPos = servoPos + 1;
+      myServo.write(servoPos);
+      //Increment the moveCounts variable by 1 ('++' means '+= 1')
+      moveCounts++;
+    }
+    
     currTime = millis(); // Update the current time
   }
   
   //You've fully entered a code or the input code time expired
+  servoPos = 0;
+  myServo.write(servoPos);
   return input.equals(CODE); 
 }
 
@@ -153,13 +185,13 @@ void ringAlarm() {
       digitalWrite(redLed, HIGH);
     } else if (angle % 360 == 180) {
       digitalWrite(redLed, LOW);
+      servoPos = servoPos * -1 + 180;
+      myServo.write(servoPos);
     }
     
     // Check for the escape key, '*', to try inputting the code again
     key = customKeypad.getKey();
     if(key == '*') {
-      noTone(buzzerPin);         // Turn off buzzer
-      digitalWrite(redLed, LOW); // Turn off red LED
       authorize();
     }
     
