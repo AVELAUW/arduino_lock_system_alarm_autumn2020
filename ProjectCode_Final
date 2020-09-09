@@ -1,3 +1,4 @@
+//Used libraries
 #include <Keypad.h>
 #include <Servo.h>
 
@@ -17,7 +18,7 @@ const int INPUT_CODE_TIME = 30;
 //Create servo object to control a servo
 Servo myServo;      
 
-//Time available for every degree in ms
+//Time available in ms for every degree the servo rotates as timer
 const int TIME_PER_DEG = (INPUT_CODE_TIME * 1000 / 180);
 //The position for the servo
 int servoPos = 0;
@@ -64,13 +65,13 @@ void setup() {
   pinMode(buzzerPin, OUTPUT); // Setting the buzzer pin as an output to play sound
   pinMode(greenLed, OUTPUT);  // Setting the green LED as an output to display light
   pinMode(redLed, OUTPUT);    // Setting the red LED as an output to display light
-  myServo.attach(servoPin);   // Setting the servo on servo pin to the servo object
+  myServo.attach(servoPin);   // Setting the servo on its pin to the servo object
 }
 
 void loop() {
   float duration, cmDist;      // Distance variables
 
-  myServo.write(0);
+  myServo.write(servoPos);     // Keeps the servo at zero
   
   digitalWrite(trigPin, LOW);  // Turn wave off
   delayMicroseconds(2);
@@ -101,7 +102,7 @@ void loop() {
 //Sketch timer execution
 void authorize() {
   startTime = millis();      // Starts timer
-  servoPos = 0;
+  servoPos = 0;              // Set position to 0
   noTone(buzzerPin);         // Turn off buzzer
   digitalWrite(redLed, LOW); // Turn off red LED
   boolean check = checkPin();
@@ -151,6 +152,7 @@ boolean checkPin() {
       Serial.println(digit);
     }
 
+    // Moves one degree as a timer
     if(timer > TIME_PER_DEG * moveCounts) {
       servoPos = servoPos + 1;
       myServo.write(servoPos);
@@ -185,7 +187,7 @@ void ringAlarm() {
       digitalWrite(redLed, HIGH);
     } else if (angle % 360 == 180) {
       digitalWrite(redLed, LOW);
-      servoPos = servoPos * -1 + 180;
+      servoPos = servoPos * -1 + 180; // Alternates the servo's position
       myServo.write(servoPos);
     }
     
@@ -200,6 +202,7 @@ void ringAlarm() {
   }
 }
 
+//Converts the duration calculated by distance sensor to cm
 float microsecondsToCentimeters(long microseconds) {
   return microseconds / 29.0 / 2.0;
 }
