@@ -144,6 +144,7 @@ boolean checkPin() {
     long timer = currTime - startTime;
     
     if (input.equals(EMERGENCYKEY)) {
+      servoPos = 0;
       return true;
     } else if (digit == '#') {
       input = ""; // Clear input
