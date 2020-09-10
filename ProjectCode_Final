@@ -183,7 +183,7 @@ void ringAlarm() {
     tone(buzzerPin, toneVal);         // Output sound frequency to buzzerPin
     delay(1);
     
-    // Blink red LED
+    // Blink red LED and rotate servo
     if(angle % 360 == 0) {
       digitalWrite(redLed, HIGH);
     } else if (angle % 360 == 180) {
