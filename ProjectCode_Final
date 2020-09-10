@@ -57,7 +57,7 @@ byte rowPins[ROWS] = {R1, R2, R3, R4};
 byte colPins[COLS] = {C1, C2, C3};
 Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
 
-// Setup code runs only once
+//Setup code runs only once
 void setup() { 
   Serial.begin(9600);         // Starting Serial Terminal
   pinMode(echoPin, INPUT);    // Setting the Echo pin as an input to receive the wave
@@ -129,8 +129,8 @@ void incorrect() {
   ringAlarm();
 }
 
-// Checks the four digit pin, returns true if the input matches the CODE
-// or if the EMERGENCYKEY is entered. # key resets the input values.
+//Checks the four digit pin, returns true if the input matches the CODE
+//or if the EMERGENCYKEY is entered. # key resets the input values.
 boolean checkPin() {
   String input = "";   // Clear input values
   
@@ -138,7 +138,7 @@ boolean checkPin() {
   clockTimer = millis();
   int moveCounts = 1;
   
-  // Check keypad inputs
+  //Check keypad inputs
   while (input.length() < 4 && (currTime - startTime) < (INPUT_CODE_TIME * 1000)) {
     char digit = customKeypad.getKey();
     long timer = currTime - startTime;
@@ -153,7 +153,7 @@ boolean checkPin() {
       Serial.println(digit);
     }
 
-    // Moves one degree as a timer
+    //Moves one degree as a timer
     if(timer > TIME_PER_DEG * moveCounts) {
       servoPos = servoPos + 1;
       myServo.write(servoPos);
@@ -183,16 +183,17 @@ void ringAlarm() {
     tone(buzzerPin, toneVal);         // Output sound frequency to buzzerPin
     delay(1);
     
-    // Blink red LED and rotate servo
+    //Blink red LED and rotate servo
     if(angle % 360 == 0) {
       digitalWrite(redLed, HIGH);
     } else if (angle % 360 == 180) {
       digitalWrite(redLed, LOW);
-      servoPos = servoPos * -1 + 180; // Alternates the servo's position
+      // Alternates the servo's position
+      servoPos = servoPos * -1 + 180;
       myServo.write(servoPos);
     }
     
-    // Check for the escape key, '*', to try inputting the code again
+    //Check for the escape key, '*', to try inputting the code again
     key = customKeypad.getKey();
     if(key == '*') {
       authorize();
