@@ -21,7 +21,7 @@ Servo myServo;
 //Time available in ms for every degree the servo rotates as timer
 const int TIME_PER_DEG = (INPUT_CODE_TIME * 1000 / 180);
 //The position for the servo
-int servoPos = 0;
+int servoPos = 180;
 
 //Initialize timer global variables
 unsigned long startTime;
@@ -71,7 +71,7 @@ void setup() {
 void loop() {
   float duration, cmDist;      // Distance variables
 
-  myServo.write(servoPos);     // Keeps the servo at zero
+  myServo.write(servoPos);     // Keeps the servo looking at zero time
   
   digitalWrite(trigPin, LOW);  // Turn wave off
   delayMicroseconds(2);
@@ -102,7 +102,7 @@ void loop() {
 //Sketch timer execution
 void authorize() {
   startTime = millis();      // Starts timer
-  servoPos = 0;              // Set position to 0
+  servoPos = 180;              // Set position to 0
   noTone(buzzerPin);         // Turn off buzzer
   digitalWrite(redLed, LOW); // Turn off red LED
   boolean check = checkPin();
@@ -135,7 +135,6 @@ boolean checkPin() {
   String input = "";   // Clear input values
   
   currTime = millis(); // Updates current timer value  
-  
   int moveCounts = 1;
   
   //Check keypad inputs
@@ -144,7 +143,7 @@ boolean checkPin() {
     long timer = currTime - startTime;
     
     if (input.equals(EMERGENCYKEY)) {
-      servoPos = 0;
+      servoPos = 180;
       return true;
     } else if (digit == '#') {
       input = ""; // Clear input
@@ -155,7 +154,7 @@ boolean checkPin() {
 
     //Moves one degree as a timer
     if(timer > TIME_PER_DEG * moveCounts) {
-      servoPos = servoPos + 1;
+      servoPos = servoPos - 1;
       myServo.write(servoPos);
       //Increment the moveCounts variable by 1 ('++' means '+= 1')
       moveCounts++;
@@ -165,7 +164,7 @@ boolean checkPin() {
   }
   
   //You've fully entered a code or the input code time expired
-  servoPos = 0;
+  servoPos = 180;
   myServo.write(servoPos);
   return input.equals(CODE); 
 }
