@@ -26,7 +26,7 @@ int servoPos = 0;
 //Initialize timer global variables
 unsigned long startTime;
 unsigned long currTime;
-unsigned long clockTimer;
+
 //Initialize room-state global variable as if you're outside the room
 boolean insideRoom = false;
 
@@ -135,7 +135,7 @@ boolean checkPin() {
   String input = "";   // Clear input values
   
   currTime = millis(); // Updates current timer value  
-  clockTimer = millis();
+  
   int moveCounts = 1;
   
   //Check keypad inputs
