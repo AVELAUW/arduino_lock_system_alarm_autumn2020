@@ -15,12 +15,7 @@ void setup() {
 
 //Put your main code here, to run repeatedly:
 void loop() {
-  
-  turnAllOn();
-  delay(1*TO_SECONDS); //Needed to notice the LEDs on;
-  turnAllOff();
-  delay(1*TO_SECONDS); //Needed to notice the LEDs off;
-  
+  //patternZero();
   //patternOne();
   //patternTwo();
   //patternThree();
@@ -37,6 +32,14 @@ void turnAllOff() {
   digitalWrite(ledOne, LOW);
   digitalWrite(ledTwo, LOW);
   digitalWrite(ledThree, LOW);
+}
+
+//Function executing pattern zero
+void patternZero() {
+  turnAllOn();
+  delay(1*TO_SECONDS); //Needed to notice the LEDs on;
+  turnAllOff();
+  delay(1*TO_SECONDS); //Needed to notice the LEDs off;
 }
 
 //Function executing pattern One
