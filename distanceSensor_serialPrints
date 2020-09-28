@@ -1,0 +1,58 @@
+//Initialize pins for the ultrasonic sensor
+int echoPin   = 6;  // Echo pin number
+int trigPin   = 7;  // Trigger pin number
+
+void setup() {
+  Serial.begin(9600);         // Starting Serial Terminal
+  pinMode(trigPin, OUTPUT);   // Setting the Trigger Pin as an output to send the wave
+  pinMode(echoPin, INPUT);    // Setting the Echo pin as an input to receive the wave
+}
+
+void loop() {
+  float duration, cmDist;      // Distance variables
+  
+  digitalWrite(trigPin, LOW);  // Turn wave off
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH); // Turn wave on
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);  // Turn wave off
+  
+  //Use the following functions to calculate the distance in cm
+  duration = pulseIn(echoPin, HIGH);
+  cmDist = microsecondsToCentimeters(duration);
+  
+  /*
+  Set up a condition where the serial monitor will print "Far: " 
+  if the cmDist is greater than 20 cm, otherwise 
+  serial monitor prints "Close: ". These should be followed
+  by the cmDist follows:
+    
+    Far: 20.01
+    Close: 10.48
+    Close: 5.31
+  
+
+
+
+
+
+
+
+
+
+
+  */
+  if() {
+    
+  } else {
+    
+  }
+  
+}
+
+//Converts the duration calculated by distance sensor to cm
+float microsecondsToCentimeters(long microseconds) {
+  return microseconds / 29.0 / 2.0;
+}
+
+
