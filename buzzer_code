@@ -13,15 +13,16 @@ void loop() {
   //ringAlarm();
 }
 
-
-void ringTone() {
+// The ring tone function
+void ?() {
   // Change the toneVal to play different frequencies from 1500-2500 Hz;
   toneVal = ?;
   // Output sound frequency to buzzerPin
   tone(buzzerPin, toneVal); 
 }
 
-void ringAlarm() {
+// The ring alarm function
+void ?() {
   // A variable to save sine values to
   float sinVal;  
   
