@@ -92,3 +92,7 @@ void patternThree() {
   turnAllOff();
   delay(1*TO_SECONDS);
 }
+
+//Function executing your pattern (fill below)
+
+
