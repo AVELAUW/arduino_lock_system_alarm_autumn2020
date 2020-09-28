@@ -1,0 +1,91 @@
+//Initialize led pins as global variables
+int ledOne   = 2;
+int ledTwo   = 3;
+int ledThree = 4;
+const int TO_SECONDS = 1000;
+
+
+//Put your setup code here, to run once:
+void setup() {
+  pinMode(ledOne, OUTPUT);
+  pinMode(ledTwo, OUTPUT);
+  pinMode(ledThree, OUTPUT);
+}
+
+
+//Put your main code here, to run repeatedly:
+void loop() {
+  
+  turnAllOn();
+  delay(1*TO_SECONDS); //Needed to notice the LEDs on;
+  turnAllOff();
+  delay(1*TO_SECONDS); //Needed to notice the LEDs off;
+  
+  //patternOne();
+  //patternTwo();
+  //patternThree();
+  //yourPattern();
+}
+
+void turnAllOn() {
+  digitalWrite(ledOne, HIGH);
+  digitalWrite(ledTwo, HIGH);
+  digitalWrite(ledThree, HIGH);
+}
+
+void turnAllOff() {
+  digitalWrite(ledOne, LOW);
+  digitalWrite(ledTwo, LOW);
+  digitalWrite(ledThree, LOW);
+}
+
+//Function executing pattern One
+void patternOne() {
+  digitalWrite(ledOne, HIGH);
+  delay(1*1000);
+  digitalWrite(ledOne, LOW);
+  digitalWrite(ledTwo, HIGH);
+  delay(1*1000);
+  digitalWrite(ledTwo, LOW);
+  digitalWrite(ledThree, HIGH);
+  delay(1*1000);
+  digitalWrite(ledThree, LOW);
+}
+
+//Function executing pattern Two
+void patternTwo() {
+  digitalWrite(ledOne, HIGH);
+  delay(1*1000);
+  digitalWrite(ledTwo, HIGH);
+  delay(1*1000);
+  digitalWrite(ledThree, HIGH);
+  delay(1*1000);
+  digitalWrite(ledOne, LOW);
+  digitalWrite(ledTwo, LOW);
+  digitalWrite(ledThree, LOW);
+  delay(2*1000);
+}
+
+//Function executing pattern Three
+void patternThree() {
+  turnAllOn();
+  delay(3*1000);
+  turnAllOff();
+  delay(1*1000);
+  turnAllOn();
+  delay(2.5*1000);
+  turnAllOff();
+  delay(1*1000);
+  turnAllOn();
+  delay(2*1000);
+  turnAllOff();
+  delay(1*1000);
+  turnAllOn();
+  delay(1.5*1000);
+  turnAllOff();
+  delay(1*1000);
+  turnAllOn();
+  delay(1*1000);
+  turnAllOff();
+  delay(1*1000);
+}
