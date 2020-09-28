@@ -1,0 +1,40 @@
+// Define a variable to save sound frequency
+int toneVal;
+
+// Initialize pin for the passive buzzer
+int buzzerPin = ?;
+
+void setup() {
+  pinMode(buzzerPin, ?); // Set the buzzer pin as an output to play sound
+}
+
+void loop() {
+  //ringTone();
+  //ringAlarm();
+}
+
+
+void ringTone() {
+  // Change the toneVal to play different frequencies from 1500-2500 Hz;
+  toneVal = ?;
+  // Output sound frequency to buzzerPin
+  tone(buzzerPin, toneVal); 
+}
+
+void ringAlarm() {
+  // A variable to save sine values to
+  float sinVal;  
+  
+  //Initialize x starting at 0 degrees
+  //Condition: x be less than 360 degrees
+  //Update x by increasing one degree every time
+  for (?; ?; ?) {
+    //Convert x (in degrees) to radians
+    radians = ?;
+    sinVal = sin(radians);
+    toneVal = 2000 + sinVal * 500;
+    tone(buzzerPin, toneVal); 
+
+    delay(1);
+  }
+}
