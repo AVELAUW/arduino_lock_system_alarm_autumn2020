@@ -12,7 +12,13 @@ void loop() {
   float duration; // Time variable
   float cmDist;   // Distance variable
   
-  // Short explanation of how this works
+  //The lines 22-26 and 29-30 are used to measure a distance by sending
+  //a short sonic wave from the distance sensor, record the time it 
+  //takes for the wave to bouce off a surface and travel back to the 
+  //sensor, and finally convert the travel time of the wave to the 
+  //distance of the surface in cm.
+  
+  //Sending a wave
   digitalWrite(trigPin, LOW);  // Turn wave off
   delayMicroseconds(2);
   digitalWrite(trigPin, HIGH); // Turn wave on
@@ -20,7 +26,7 @@ void loop() {
   digitalWrite(trigPin, LOW);  // Turn wave off
  
   //The following functions calculate the distance in cm
-  duration = pulseIn(echoPin, HIGH);
+  duration = pulseIn(echoPin, HIGH); // Travel time of sonic wave
   cmDist = microsecondsToCentimeters(duration);
   
   /*
