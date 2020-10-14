@@ -39,9 +39,7 @@ void loop() {
     Close: 10.48
     Close: 5.31
   */
-  
   //Conditional statement below
-  
   
   
 }
@@ -50,5 +48,3 @@ void loop() {
 float microsecondsToCentimeters(long microseconds) {
   return microseconds / 29.0 / 2.0;
 }
-
-
