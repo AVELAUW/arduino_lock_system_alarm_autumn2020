@@ -58,7 +58,7 @@ boolean callPhone() {
   //Create a while loop that repeats while the length of the
   //phone is less than 10
   while(?) {
-    //Save a pressed key value
+    //Save a single pressed key value
     char digit = ?;
     
     //Create a conditional to make sure the digit is valid to add
