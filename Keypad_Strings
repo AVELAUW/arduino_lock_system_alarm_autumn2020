@@ -67,6 +67,8 @@ boolean callPhone() {
     //1. An actual digit must be pressed (the digit cannot be NO_KEY)
     //2. The digit cannot be '*'
     //3. The digit cannot be '#'
+    //To create multiple conditions use '&&' like: 
+    //if(condition1 && condition2 && condition3) {}
     if(?) { // '!=' means 'does not equal'
       //Add the digit to the phone digits already entered
       phone = ?;
