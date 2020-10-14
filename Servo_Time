@@ -93,7 +93,7 @@ void alarm() {
       ?
       ?
       ?
-    } else if (x % 720 == 360){
+    } else if (?){
       ?
       ?
       ?
