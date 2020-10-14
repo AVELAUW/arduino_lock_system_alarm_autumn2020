@@ -86,7 +86,7 @@ void alarm() {
     //If the modulo of x by 720 equals 0:
     //  Set the servo position to 180 and move it there,
     //  then set a delay of half a second.
-    //Else if the module of x by 720 equals 360:
+    //Else if the modulo of x by 720 equals 360:
     //  Set the servo position to 0 and move it there,
     //  then set a delay of half a second.
     if(?) {
