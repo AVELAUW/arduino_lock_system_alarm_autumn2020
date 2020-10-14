@@ -1,0 +1,89 @@
+//Used libraries
+#include <Servo.h>
+
+//Create servo object to control a servo
+Servo myServo;   
+
+//Time to set as a timer in seconds
+const int TIME = 30;
+
+//Calculate the time per degree rate by converting TIME from
+//seconds to milliseconds and dividing by the maximum degrees
+//in the servo's range
+const int TIME_PER_DEG = (TIME * 1000 / 180);
+
+//Initialize the servo pin variable
+int servoPin  = 4;
+
+//The position for the servo
+int servoPos;
+
+//Initialize timer global variables
+unsigned long startTime;
+unsigned long currTime;
+
+//Setting the servo on its pin to the servo object
+void setup() {
+  myServo.attach(servoPin);
+}
+
+void loop() {
+  //Identify where position 180 degrees is
+  //by setting the servoPos to 180, make the servo move
+  //there and delaying 3 seconds.
+  servoPos = 180;
+  myServo.write(servoPos);
+  delay(3 * 1000);
+  
+  //Try each function at a time
+  //timer();
+  alarm();
+}
+
+void timer() {
+  //Time when going in the function
+  startTime = millis(); 
+  //Time to update and notice the time difference over time
+  currTime = millis();  
+  
+  //Keep track of how many roations the servo does
+  int moveCounts = 1;
+  
+  //
+  while ((currTime - startTime) < (TIME * 1000)) {
+    
+    long timer = currTime - startTime;
+    
+    //Moves one degree as a timer
+    if(timer > TIME_PER_DEG * moveCounts) {
+      servoPos = servoPos - 1;
+      myServo.write(servoPos);
+      //Increment the moveCounts variable by 1 ('++' means '+= 1')
+      moveCounts++;
+    }
+    
+    currTime = millis(); // Update the current time
+    
+  }
+  
+  servoPos = 180;
+  myServo.write(servoPos);
+}
+
+void alarm() {
+  
+  for(int x = 0; x <= 1080; x++) {
+    
+    if(x % 720 == 0) {
+      servoPos = 180;
+      myServo.write(servoPos);
+      delay(500);
+    } else if (x % 720 == 360){
+      servoPos = 0;
+      myServo.write(servoPos);
+      delay(500);
+    }
+    
+  }
+  
+}
