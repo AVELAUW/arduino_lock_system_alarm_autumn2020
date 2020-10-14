@@ -68,8 +68,8 @@ boolean callPhone() {
     //2. The digit cannot be '*'
     //3. The digit cannot be '#'
     if(?) { // '!=' means 'does not equal'
-      //Add the digit to the phone
-      phone += ?;
+      //Add the digit to the phone digits already entered
+      phone = ?;
       Serial.print(digit);
     }
     
