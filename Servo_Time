@@ -10,10 +10,10 @@ const int TIME = 30;
 //Calculate the time per degree rate by converting TIME from
 //seconds to milliseconds and dividing by the maximum degrees
 //in the servo's range
-const int TIME_PER_DEG = (TIME * 1000 / 180);
+const int TIME_PER_DEG = (?);
 
 //Initialize the servo pin variable
-int servoPin  = 4;
+int servoPin  = ?;  //Servo signal pin number to control servo 
 
 //The position for the servo
 int servoPos;
@@ -31,15 +31,16 @@ void loop() {
   //Identify where position 180 degrees is
   //by setting the servoPos to 180, make the servo move
   //there and delaying 3 seconds.
-  servoPos = 180;
-  myServo.write(servoPos);
-  delay(3 * 1000);
+  servoPos = ?;
+  myServo.write(?);
+  delay(?);
   
-  //Try each function at a time
-  //timer();
-  alarm();
+  //Try each function at a time, then try both
+  timer();
+  //alarm();
 }
 
+//This function moves the servo as a timer
 void timer() {
   //Time when going in the function
   startTime = millis(); 
@@ -49,39 +50,50 @@ void timer() {
   //Keep track of how many roations the servo does
   int moveCounts = 1;
   
-  //
+  //Control the servo as a timer
   while ((currTime - startTime) < (TIME * 1000)) {
     
     long timer = currTime - startTime;
     
     //Moves one degree as a timer
     if(timer > TIME_PER_DEG * moveCounts) {
-      servoPos = servoPos - 1;
-      myServo.write(servoPos);
+      //Reduce the servo position by one
+      servoPos??;
+      //Move the servo to the new position
+      myServo.write(?);
       //Increment the moveCounts variable by 1 ('++' means '+= 1')
-      moveCounts++;
+      moveCounts??;
     }
     
-    currTime = millis(); // Update the current time
+    // Updates the current time
+    currTime = millis(); 
     
   }
   
-  servoPos = 180;
-  myServo.write(servoPos);
+  //Set the servo position back to 180 and move it there
+  ?
+  ?
 }
 
+//This function moves the servo as a ringing alarm
 void alarm() {
   
   for(int x = 0; x <= 1080; x++) {
     
-    if(x % 720 == 0) {
-      servoPos = 180;
-      myServo.write(servoPos);
-      delay(500);
+    //If the modulo of x by 720 equals 0:
+    //  Set the servo position to 180 and move it there,
+    //  then set a delay of half a second.
+    //Else if the module of x by 720 equals 360:
+    //  Set the servo position to 0 and move it there,
+    //  then set a delay of half a second.
+    if(?) {
+      ?
+      ?
+      ?
     } else if (x % 720 == 360){
-      servoPos = 0;
-      myServo.write(servoPos);
-      delay(500);
+      ?
+      ?
+      ?
     }
     
   }
