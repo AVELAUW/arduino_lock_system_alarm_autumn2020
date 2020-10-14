@@ -70,7 +70,7 @@ boolean callPhone() {
     //To create multiple conditions use '&&' like: 
     //if(condition1 && condition2 && condition3) {}
     if(?) { // '!=' means 'does not equal'
-      //Add the digit to the phone digits already entered
+      //Add the new digit to the phone number
       phone = ?;
       Serial.print(digit);
     }
