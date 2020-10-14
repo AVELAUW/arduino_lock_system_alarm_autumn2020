@@ -50,7 +50,6 @@ void loop() {
   
   //Reset the phone to being empty
   phone = "";
-  
 }
 
 //Check keypad inputs and returns true if the inputs are 911
