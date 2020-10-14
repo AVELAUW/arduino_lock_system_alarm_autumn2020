@@ -35,12 +35,12 @@ void loop() {
   boolean isEmergency = callPhone();
   
   if(isEmergency == true) {
-    //Create a for loop that repeats 3 times:
-    //"EMERGENCY"
-    //Calling 911
-    //Empty line
-    for( ; ; ) {
-      
+    //Create a for loop that prints the following message 3 times:
+    //"EMERGENCY
+    //Calling 911"
+    //..."
+    for(?; ?; ?) {
+      ?
     }
   } else {
     Serial.print("Calling: ");
@@ -56,30 +56,30 @@ void loop() {
 //Check keypad inputs and returns true if the inputs are 911
 //or false if it's an actual 10 digit phone number
 boolean callPhone() {
-  
   //Create a while loop that repeats while the length of the
   //phone is less than 10
-  while () {
-    //Collect a pressed key
-    char digit = ;
+  while(?) {
+    //Save a pressed key value
+    char digit = ?;
     
     //Create a conditional to make sure the digit is valid to add
-    //to the phone number, to be valid:
-    //An actual digit must be pressed (the digit cannot be NO_KEY)
-    //The digit cannot be '*'
-    //The digit cannot be '#'
-    if () { // '!=' means 'does not equal'
+    //to the phone number. To be valid:
+    //1. An actual digit must be pressed (the digit cannot be NO_KEY)
+    //2. The digit cannot be '*'
+    //3. The digit cannot be '#'
+    if(?) { // '!=' means 'does not equal'
       //Add the digit to the phone
-      phone = ;
+      phone += ?;
       Serial.print(digit);
     }
     
     //Create a conditional that check if the phone equals "911"
     //If it equals "911" print a new line then return true to exit the function
-    if() {
-      
+    if(?) {
+      ?
     }
   }
   
-  //Print and extra line and return false
+  //Print a new line and return false
+  ?
 }
