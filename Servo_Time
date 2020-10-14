@@ -50,8 +50,11 @@ void timer() {
   //Keep track of how many roations the servo does
   int moveCounts = 1;
   
-  //Control the servo as a timer
-  while ((currTime - startTime) < (TIME * 1000)) {
+  //Create a while loop that repeats while 
+  //the currTime (updated later) - the startTime is
+  //less than the TIME in seconds(Arduino reads milliseconds 
+  //so a multiplication is needed).
+  while ((?) < (?)) {
     
     long timer = currTime - startTime;
     
