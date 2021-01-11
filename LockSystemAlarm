@@ -2,22 +2,20 @@
 #include <Keypad.h>
 #include <Servo.h>
 
-/*
-The following are the class constants for you to fill
-based on the instructions from the slides
-*/
+//The following are the class constants for you to fill
+//based on the instructions from the slides
 //Access code
-const String CODE;
+const String CODE = ?;
 //Emergency key
-const String EMERGENCYKEY;
+const String EMERGENCYKEY = ?;
 //Normal distance to closed room door in cm
-const int NORM_DIST;
+const int NORM_DIST = ?;
 //Error bound for an open door in cm
-const int ERROR;
+const int ERROR = ?;
 //Time to input code into keypad
-const int INPUT_CODE_TIME;
+const int INPUT_CODE_TIME = ?;
 //Time to leave the room in seconds
-const int EXIT_TIME;
+const int EXIT_TIME = ?;
 
 
 //Create servo object to control a servo
@@ -25,7 +23,7 @@ Servo myServo;
 
 //Time available in ms for every degree the servo rotates as timer
 const int TIME_PER_DEG = (INPUT_CODE_TIME * 1000 / 180);
-//The position for the servo
+//The position for the servo at time 0
 int servoPos = 180;
 
 //Initialize timer global variables
@@ -35,13 +33,13 @@ unsigned long currTime;
 //Initialize room-state global variable as if you're outside the room
 boolean insideRoom = false;
 
-//Initialize pin global variables
-int servoPin  = 4;  // Servo signal line pin number
-int buzzerPin = 5;  // Buzzer pin number
-int echoPin   = 6;  // Ultrasonic Sensor echo pin number
-int trigPin   = 7;  // Ultrasonic Sensor trigger pin number
-int greenLed  = 11; // Green LED pin number
-int redLed    = 12; // Red LED pin number
+//Initialize pin global variables depending on your arduino
+int servoPin  = ?;  // Servo signal line pin number
+int buzzerPin = ?;  // Buzzer pin number
+int echoPin   = ?;  // Ultrasonic Sensor echo pin number
+int trigPin   = ?;  // Ultrasonic Sensor trigger pin number
+int greenLed  = ?; // Green LED pin number
+int redLed    = ?; // Red LED pin number
 
 //Keypad setup
 const byte ROWS = 4;
@@ -62,153 +60,238 @@ byte rowPins[ROWS] = {R1, R2, R3, R4};
 byte colPins[COLS] = {C1, C2, C3};
 Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
 
-//Setup code runs only once
+//Setup the 
 void setup() { 
-  Serial.begin(9600);         // Starting Serial Terminal
-  pinMode(echoPin, INPUT);    // Setting the Echo pin as an input to receive the wave
-  pinMode(trigPin, OUTPUT);   // Setting the Trigger Pin as an output to send the wave
-  pinMode(buzzerPin, OUTPUT); // Setting the buzzer pin as an output to play sound
-  pinMode(greenLed, OUTPUT);  // Setting the green LED as an output to display light
-  pinMode(redLed, OUTPUT);    // Setting the red LED as an output to display light
-  myServo.attach(servoPin);   // Setting the servo on its pin to the servo object
+  Serial.begin(?);         // Starting Serial Terminal
+  pinMode(?, ?);    // Setting the Echo pin as an input to receive the wave
+  pinMode(?, ?);   // Setting the Trigger Pin as an output to send the wave
+  pinMode(?, ?); // Setting the buzzer pin as an output to play sound
+  pinMode(?, ?);  // Setting the green LED as an output to display light
+  pinMode(?, ?);    // Setting the red LED as an output to display light
+  myServo.attach(?);   // Setting the servo on its pin to the servo object
 }
 
+/*
+Continuously checks the distance to the door
+Keeps track of whether the person is entering or leaving the room
+*/
 void loop() {
   float duration, cmDist;      // Distance variables
 
   myServo.write(servoPos);     // Keeps the servo looking at zero time
   
-  digitalWrite(trigPin, LOW);  // Turn wave off
+  digitalWrite(trigPin, ?);  // Turn wave off
   delayMicroseconds(2);
-  digitalWrite(trigPin, HIGH); // Turn wave on
+  digitalWrite(trigPin, ?); // Turn wave on
   delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);  // Turn wave off
+  digitalWrite(trigPin, ?);  // Turn wave off
   
   //Use the following functions to calculate the distance in cm
   duration = pulseIn(echoPin, HIGH);
   cmDist = microsecondsToCentimeters(duration);
   
-  //Prints results to the serial monitor
-  Serial.print(cmDist);
-  Serial.println("cm");
+  //Print the cmDist to the serial monitor followed by the units
+  //ex: 15.23cm
+  Serial.print(?);
+  Serial.println(?);
 
-  if (fabs(cmDist - NORM_DIST) > ERROR) { // fabs() = float absolute value
-    if (insideRoom == false) {
-      Serial.println("You're trying to get in");
-      authorize();
+  //Create a condition that checks if the door opens (account for both ways)
+  //using the current cmDist, the NORM_DIST and the ERROR (hint: use fabs)
+  if (?) { // fabs() = float absolute value
+    
+    //Check if the person is entering and authorization is needed:
+    //  Print "You're trying to get in" and call the authorize function
+    //Else (if the person is leaving)
+    //  Print "You're leaving the room"
+    //  Update the variable insideRoom
+    //  Allow the person to leave with a delay of EXIT_TIME seconds
+    if (?) {
+      
+      
     } else {
-      Serial.println("You're leaving the room");
-      insideRoom = false;
-      delay(EXIT_TIME * 1000);
+      
+      
+      
     }
   }
 }
 
-//Sketch timer execution
+/*
+Prepares the global variables needed in other functions
+Calls the needed functions to decide whether it's an authorized entrance or not 
+*/
 void authorize() {
-  startTime = millis();      // Starts timer
-  servoPos = 180;              // Set position to 0
-  noTone(buzzerPin);         // Turn off buzzer
-  digitalWrite(redLed, LOW); // Turn off red LED
+  //Record the time to know when authorizing process begins (milliseconds)
+  startTime = millis(); 
+  //Set position to zero time (180 degrees)
+  servoPos = ?;
+  //Turn off the buzzer
+  noTone(?);
+  //Turn off the red LED
+  ??;
+  //Sets check to be the return from checkPin
   boolean check = checkPin();
-  if (check == true) {
-    correct();
-  } else {
-    incorrect();
+  //Create a condition to either authorize or unauthorize
+  //  If check is true then call the correct function
+  //  Else call the incorrect function
+  ? {
+    ?
+  } ? {
+    ?
   }
 }
 
+/*
+Makes the person aware that the access is authorized and updates the insideRoom status
+*/
 void correct() {
-  Serial.println("Welcome");
-  noTone(buzzerPin);
-  insideRoom = true;
+  //Print a welcome message to the person
+  ?
+  //Turn off the buzzer
+  ?
+  //Update the status that the person is successfully inside the room
+  ?
   
-  //Turn green LED on for three seconds
-  digitalWrite(greenLed, HIGH); 
-  delay(3000); 
-  digitalWrite(greenLed, LOW);
+  //Turn the green LED on for three seconds then off
+  ?
+  ?
+  ?
 }
 
+/*
+Manages the calls needed to let the person know the access is unauthorized
+*/
 void incorrect() {
-  Serial.println("Alarm will start");
-  ringAlarm();
+  //Print a message letting know the access is unauthorized
+  ?
+  //Call the ringAlarm method
+  ?
 }
 
-//Checks the four digit pin, returns true if the input matches the CODE
-//or if the EMERGENCYKEY is entered. # key resets the input values.
+/*
+Makes sure there is time left as it moves the servo, 
+Compares the inputted code to the CODE & EMERGENCYKEY.
+Returns
+  True if the input is the same as CODE
+  False if the input is different from the CODE
+*/
 boolean checkPin() {
-  String input = "";   // Clear input values
+  //Used to keep track of input values
+  String input = "";
   
-  currTime = millis(); // Updates current timer value  
+  //Used to keep track of the current time as it continues to pass (milliseconds)
+  currTime = millis();
+  //Keep track of how many roations the servo does
   int moveCounts = 1;
   
-  //Check keypad inputs
-  while (input.length() < 4 && (currTime - startTime) < (INPUT_CODE_TIME * 1000)) {
-    char digit = customKeypad.getKey();
+  //Create a while loop that runs as long as:
+  //  The length of the input is less than 4 and
+  //  The currTime - startTime is less than the INPUT_CODE_TIME in milliseconds
+  while (??) {
+    //Collect the pressed key
+    char digit = ?;
+    //Collects the time that has passed (milliseconds)
     long timer = currTime - startTime;
     
-    if (input.equals(EMERGENCYKEY)) {
-      servoPos = 180;
-      return true;
-    } else if (digit == '#') {
-      input = ""; // Clear input
-    } else if (digit != NO_KEY) { // '!=' means 'does not equal'
-      input = input + digit;
-      Serial.println(digit);
+    //Check if the input equals the EMERGENCYKEY
+    //  Set the servo back to zero time (180)
+    //  Return true which will break out of the function
+    //Check if the pressed key is '#'
+    //  Reset the input back to a blank string
+    //Check that there's an actual key pressed
+    //  Update the input by adding the digit to it
+    //  Print digit to know the pressed values
+    if (?) {
+      ?
+      ?
+    } ? {
+      ?
+    } ? {
+      ?
+      ?
     }
 
-    //Moves one degree as a timer
-    if(timer > TIME_PER_DEG * moveCounts) {
-      servoPos = servoPos - 1;
-      myServo.write(servoPos);
+    //Move one degree as a timer as it was done in Servo_Time
+    if(?) {
+      //Reduce the servo position by one
+      ?
+       //Move the servo to the new position
+      ?
       //Increment the moveCounts variable by 1 ('++' means '+= 1')
-      moveCounts++;
+      ?
     }
     
-    currTime = millis(); // Update the current time
+    //Update the current time
+    ?
   }
   
+  //If this point has been reached
   //You've fully entered a code or the input code time expired
-  servoPos = 0;
-  myServo.write(servoPos);
-  return input.equals(CODE); 
+  //Set the servo position to the end of the time (0 degrees) and move it there
+  ?
+  ?
+  //Return 
+  //  True if the input equals the code
+  //  False otherwise
+  ?; 
 }
 
+/*
+Warns there is no authorized access by ringing the buzzer as an alarm,
+flashing the red LED and moving the servo from one end to another
+*/
 void ringAlarm() {
-  float sinVal;  // Define a variable to save sine value
-  int toneVal;   // Define a variable to save sound frequency
-  int angle = 0; // Define an angle variable for the alarm sine function
+  //A variable to save sine values to
+  float sinVal;  
+  //Defines a variable to save sound frequency
+  int toneVal;   
+  //Defines an angle variable for the alarm sine function
+  int angle = 0; 
+  //Character used to collect pressed keys
   char key = customKeypad.getKey();
   
-  //Ring alarm repeatedly
-  while (key != '*') {
-    sinVal = sin(angle * (PI / 180)); // Calculate the sine of the angle
-    toneVal = 2000 + sinVal * 500;    // Calculate sound frequency according to the sine of the angle
-    tone(buzzerPin, toneVal);         // Output sound frequency to buzzerPin
-    delay(1);
+  //Ring alarm repeadetly while the pressed key is not '*'
+  ? {
+    //Calculate the sine of the angle (in radians)
+    sinVal = ?; 
+    //Change the toneVal to play different frequencies from 1500-2500 Hz;
+    toneVal = ?;
+    // Output sound frequency to buzzerPin
+    ?
+    //Delay 1 millisecond
+    ?
     
     //Blink red LED and rotate servo
-    if(angle % 360 == 0) {
-      digitalWrite(redLed, HIGH);
-    } else if (angle % 360 == 180) {
-      digitalWrite(redLed, LOW);
-      // Alternates the servo's position
-      servoPos = servoPos * -1 + 180;
-      myServo.write(servoPos);
+    //If the modulo of angle by 360 equals 0:
+    //  Turn on the red LED
+    //Else if the modulo of angle by 360 equals 180:
+    //  Turn off the red LED
+    //  Change the servo position to the opposite end
+    //  by multiplying the current position by -1 and adding 180
+    //  Move the servo to the new position
+    ? {
+      ?
+    } ? {
+      ?
+      ?
+      ?
     }
     
-    //Check for the escape key, '*', to try inputting the code again
-    key = customKeypad.getKey();
-    if(key == '*') {
-      authorize();
+    //Check for the pressed key
+    //If the pressed key is '*' call the authorize function
+    key = ?;
+    ? {
+      ?
     }
     
     //Increment the angle variable by 1 ('++' means '+= 1')
-    angle++;
+    ?;
   }
 }
 
-//Converts the duration calculated by distance sensor to cm
+/*
+Converts the duration calculated by the distance sensor to cm
+*/
 float microsecondsToCentimeters(long microseconds) {
   return microseconds / 29.0 / 2.0;
 }
