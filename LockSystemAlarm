@@ -97,7 +97,7 @@ void loop() {
 
   //Create a condition that checks if the door opens (account for both ways)
   //using the current cmDist, the NORM_DIST and the ERROR (hint: use fabs)
-  if (?) { // fabs() = float absolute value
+  if (?) { // fabs() is how you do the absolute value of a float
     
     //Check if the person is entering and authorization is needed:
     //  Print "You're trying to get in" and call the authorize function
@@ -106,12 +106,9 @@ void loop() {
     //  Update the variable insideRoom
     //  Allow the person to leave with a delay of EXIT_TIME seconds
     if (?) {
-      
-      
+      ?
     } else {
-      
-      
-      
+      ?
     }
   }
 }
