@@ -7,7 +7,7 @@
 //Access code
 const String CODE = ?;
 //Emergency key
-const String EMERGENCYKEY = ?;
+const String EMERGENCY_KEY = ?;
 //Normal distance to closed room door in cm
 const int NORM_DIST = ?;
 //Error bound for an open door in cm
