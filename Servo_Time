@@ -10,7 +10,7 @@ const int TIME = 30;
 //Calculate the time per degree rate by converting TIME from
 //seconds to milliseconds and dividing by the maximum degrees
 //in the servo's range
-const int TIME_PER_DEG = (?);
+const int TIME_PER_DEG = ?;
 
 //Initialize the servo pin variable
 int servoPin  = ?;  //Servo signal pin number to control servo 
@@ -60,11 +60,11 @@ void timer() {
     
     //Moves one degree as a timer
     if(timer > TIME_PER_DEG * moveCounts) {
-      //Reduce the servo position by one
+      //Reduce the servo position by 1 ('--' means 'x = x-1')
       servoPos??;
       //Move the servo to the new position
       myServo.write(?);
-      //Increment the moveCounts variable by 1 ('++' means '+= 1')
+      //Increment the moveCounts variable by 1 ('++' means 'x = x+1')
       moveCounts??;
     }
     
