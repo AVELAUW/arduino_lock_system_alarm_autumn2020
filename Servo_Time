@@ -4,13 +4,15 @@
 //Create servo object to control a servo
 Servo myServo;   
 
-//Time to set as a timer in seconds
-const int TIME = 30;
+//Time inbetween full rotations in seconds (start by setting to 5)
+const int TIME = ?;
+//Degree of rotation for the servo (either 180 or 360)
+const int DEGREE = ?;
 
 //Calculate the time per degree rate by converting TIME from
 //seconds to milliseconds and dividing by the maximum degrees
 //in the servo's range
-const int TIME_PER_DEG = ?;
+const int TIME_PER_DEG = TIME*1000/DEGREE;
 
 //Initialize the servo pin variable
 int servoPin  = ?;  //Servo signal pin number to control servo 
@@ -28,12 +30,12 @@ void setup() {
 }
 
 void loop() {
-  //Identify where position 180 degrees is
-  //by setting the servoPos to 180, make the servo move
-  //there and delaying 3 seconds.
+  //Set the servoPos to DEGREE 
+  //Pass in the servoPos variable to the write function
+  //Delay by TIME seconds.
   servoPos = ?;
   myServo.write(?);
-  delay(?);
+  delay(?*1000);
   
   //Try each function at a time, then try both
   timer();
@@ -48,21 +50,18 @@ void timer() {
   currTime = millis();  
   
   //Keep track of how many roations the servo does
-  int moveCounts = 1;
+  int moveCounts = 0;
   
   //Create a while loop that repeats while 
-  //the currTime (updated later) - the startTime is
-  //less than the TIME in seconds(Arduino reads milliseconds 
-  //so a multiplication is needed).
-  while ((?) < (?)) {
-    
-    long timer = currTime - startTime;
+  //the currTime minus the startTime is
+  //less than the TIME in seconds.
+  while (? < ?*1000) {
     
     //Moves one degree as a timer
-    if(timer > TIME_PER_DEG * moveCounts) {
+    if(currTime - startTime > TIME_PER_DEG * moveCounts) {
       //Reduce the servo position by 1 ('--' means 'x = x-1')
       servoPos??;
-      //Move the servo to the new position
+      //Move the servo to the new position (servoPos)
       myServo.write(?);
       //Increment the moveCounts variable by 1 ('++' means 'x = x+1')
       moveCounts??;
@@ -70,14 +69,10 @@ void timer() {
     
     // Updates the current time
     currTime = millis(); 
-    
   }
-  
-  //Set the servo position back to 180 and move it there
-  ?
-  ?
 }
 
+/*
 //This function moves the servo as a ringing alarm
 void alarm() {
   
@@ -98,7 +93,7 @@ void alarm() {
       ?
       ?
     }
-    
   }
+*/
   
 }
