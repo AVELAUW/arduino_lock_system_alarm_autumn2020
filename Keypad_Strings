@@ -36,9 +36,9 @@ void loop() {
   
   if(isEmergency == true) {
     //Create a for loop that prints the following message 3 times:
-    //"EMERGENCY
-    //Calling 911"
-    //..."
+    //EMERGENCY
+    //Calling 911
+    //...
     for(?; ?; ?) {
       ?
     }
@@ -70,7 +70,7 @@ boolean callPhone() {
     //if(condition1 && condition2 && condition3) {}
     if(?) { // '!=' means 'does not equal'
       //Add the new digit to the phone number
-      phone = ?;
+      phone += ?;
       Serial.print(digit);
     }
     
