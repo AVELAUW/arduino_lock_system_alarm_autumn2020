@@ -2,29 +2,29 @@
 
 // Sensor pins
 #define sensorPower ? // put the pin number plugged in for the VCC
-#define sensorPin A0
+#define sensorPin ? // put the pin number plugged in for the Signal output
 
 // Variable that will hold water level value
-int val = 0;
+int val = ?;  //put a number that the sensor would start at 
 
 void setup() {
 	// Set D7 as an OUTPUT
-	pinMode(sensorPower, OUTPUT);
+	pinMode(sensorPower, ?); //put "OUTPUT"
 	
 	// Set to LOW so no power flows through the sensor
 	digitalWrite(sensorPower, LOW);
 	
-	Serial.begin(9600);
+	Serial.begin(?); //the baud rate we are testing with (it was mentioned in the slides)
 }
 
 void loop() {
 	//get the reading from the function below and print it
 	int level = readSensor();
 	
-	Serial.print("Water level: ");
+	Serial.print(?); // write "Water level: "
 	Serial.println(level);
 	
-	delay(1000);
+	delay(?); // 1 second but in milliseconds
 }
 
 //This is a function used to get the reading
