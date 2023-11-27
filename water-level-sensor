@@ -5,7 +5,7 @@
 #define sensorPin ? // put the pin number plugged in for the Signal output
 
 // Variable that will hold water level value
-int val = ?;  //put a number that the sensor would start at 
+int val = ?;  //put an ideal starting value for the water level
 
 void setup() {
 	// Set D7 as an OUTPUT
